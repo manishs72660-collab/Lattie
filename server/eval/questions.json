@@ -1,0 +1,77 @@
+[
+  {
+    "type": "factual",
+    "question": "Who founded Nimbus Systems?",
+    "expected": "Dr. Maya Chen founded Nimbus Systems in 2018."
+  },
+  {
+    "type": "factual",
+    "question": "What is the flagship product of Nimbus Systems?",
+    "expected": "NimbusFlow, a workflow automation platform."
+  },
+  {
+    "type": "factual",
+    "question": "Which cloud provider hosts NimbusFlow?",
+    "expected": "Snowpeak Cloud."
+  },
+  {
+    "type": "factual",
+    "question": "Who is the Chief Technology Officer of Nimbus Systems?",
+    "expected": "Raj Patel."
+  },
+  {
+    "type": "factual",
+    "question": "When did Nimbus Systems raise its Series C round and how much was it?",
+    "expected": "November 2023, $120 million."
+  },
+  {
+    "type": "factual",
+    "question": "Which company led Nimbus Systems' Series C funding round?",
+    "expected": "Meridian Ventures."
+  },
+  {
+    "type": "factual",
+    "question": "Where is Nimbus Systems headquartered?",
+    "expected": "Singapore (relocated from Bengaluru in 2023)."
+  },
+  {
+    "type": "multi_hop",
+    "question": "How are Nimbus Systems and Polaris Analytics connected?",
+    "expected": "Nimbus Systems acquired Polaris Analytics in September 2022; Polaris was founded by Elena Volkov in Berlin."
+  },
+  {
+    "type": "multi_hop",
+    "question": "Which Nimbus Systems acquisition was based in Tokyo?",
+    "expected": "Kite Labs, founded by Hiroshi Tanaka, acquired in March 2024."
+  },
+  {
+    "type": "multi_hop",
+    "question": "Which company did Elena Volkov found, and what role did she take after its acquisition?",
+    "expected": "She founded Polaris Analytics; after Nimbus acquired it, she became Chief Data Officer."
+  },
+  {
+    "type": "multi_hop",
+    "question": "How are Maya Chen and Hiroshi Tanaka connected through Nimbus Systems?",
+    "expected": "Maya Chen founded Nimbus Systems; Nimbus acquired Hiroshi Tanaka's Kite Labs in 2024, and Hiroshi became VP of Engineering."
+  },
+  {
+    "type": "multi_hop",
+    "question": "Which two acquisitions expanded Nimbus Systems' presence in Europe and Asia-Pacific?",
+    "expected": "Polaris Analytics (Berlin, Europe) in 2022 and Kite Labs (Tokyo, Asia-Pacific) in 2024."
+  },
+  {
+    "type": "unanswerable",
+    "question": "What was Nimbus Systems' revenue in 2025?",
+    "expected": "The documents do not contain this information."
+  },
+  {
+    "type": "unanswerable",
+    "question": "Who is the current CEO of Snowpeak Cloud?",
+    "expected": "The documents do not contain this information."
+  },
+  {
+    "type": "unanswerable",
+    "question": "What is Nimbus Systems' stock price today?",
+    "expected": "The documents do not contain this information."
+  }
+]
