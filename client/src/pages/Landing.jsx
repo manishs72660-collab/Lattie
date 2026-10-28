@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import BrandMark from "../components/BrandMark";
 
 function ArrowIcon({ diagonal = false }) {
   return (
@@ -10,18 +11,6 @@ function ArrowIcon({ diagonal = false }) {
         <path d="M3.5 10h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
       )}
     </svg>
-  );
-}
-
-function BrandMark() {
-  return (
-    <span className="brand-mark" aria-hidden="true">
-      <svg viewBox="0 0 32 32" fill="none" className="h-7 w-7">
-        <path d="M16 4.5 26 10v12L16 27.5 6 22V10l10-5.5Z" stroke="currentColor" strokeWidth="1.5" />
-        <path d="m6.5 10.3 9.5 5.3 9.5-5.3M16 16v11" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="16" cy="16" r="2.1" fill="currentColor" />
-      </svg>
-    </span>
   );
 }
 
@@ -208,7 +197,7 @@ export default function Landing() {
         <div className="closing-card mx-auto max-w-7xl overflow-hidden px-6 py-14 text-center sm:px-12 sm:py-20">
           <div className="closing-orb orb-a" /><div className="closing-orb orb-b" />
           <div className="relative z-10 mx-auto max-w-2xl">
-            <BrandMark />
+            <img className="closing-logo-art" src="/Lattice%20Cube%20Glow%20Logo.png" alt="Lattice" />
             <p className="landing-eyebrow mx-auto mt-5 justify-center">YOUR NEXT GOOD QUESTION STARTS HERE</p>
             <h2 className="closing-heading mt-5">Your files have more<br className="hidden sm:block" /> to tell you.</h2>
             <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-white/65 sm:text-base">Bring them together. Find a thread you hadn’t seen. Start with one question.</p>

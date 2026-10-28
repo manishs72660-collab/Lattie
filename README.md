@@ -74,8 +74,8 @@ Open **Knowledge graph** to explore the extracted entities.
 3. It compares **plain vector RAG vs. the agentic graph RAG** with an LLM judge and prints both accuracies.
 
 ## Deploy
-- **Backend → Render / Railway**: root `server`, build `npm install`, start `npm start`. Add all `.env` values and set `CLIENT_URL` to your frontend URL.
-- **Frontend → Vercel / Netlify**: root `client`, build `npm run build`, output `dist`, env `VITE_API_URL=https://<your-backend>/api`.
+- **Backend → Render / Railway**: root `server`, build `npm install`, start `npm start`. Add all `.env` values and set `CLIENT_URL=https://lattie.vercel.app` in the hosting dashboard. Health check path: `/health` (also available at `/api/health`).
+- **Frontend → Vercel / Netlify**: root `client`, build `npm run build`, output `dist`, env `VITE_API_URL=https://lattie.onrender.com/api`. The checked-in `client/.env.production` supplies this URL for production builds unless overridden in the hosting dashboard.
 - MongoDB Atlas: allow the backend's outbound IP.
 - Render free tier sleeps after 15 min idle: open the backend URL once before a demo.
 

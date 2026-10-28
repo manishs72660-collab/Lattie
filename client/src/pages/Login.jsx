@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, register, clearError } from "../store/authSlice";
 import AgentTrace from "../components/AgentTrace";
+import BrandMark from "../components/BrandMark";
 
 const SAMPLE = [
   "Routed to knowledge graph: asks how two companies are connected",
@@ -31,7 +32,7 @@ export default function Login({ mode }) {
   return (
     <div className="auth-page grid min-h-dvh lg:grid-cols-2">
       <section className="auth-story relative hidden flex-col justify-center overflow-hidden p-14 text-white lg:flex">
-        <Link to="/" className="absolute left-12 top-10 flex items-center gap-2 text-lg font-bold tracking-tight"><span className="brand-mark"><svg viewBox="0 0 32 32" fill="none" className="h-7 w-7"><path d="M16 4.5 26 10v12L16 27.5 6 22V10l10-5.5Z" stroke="currentColor" strokeWidth="1.5" /><path d="m6.5 10.3 9.5 5.3 9.5-5.3M16 16v11" stroke="currentColor" strokeWidth="1.5" /><circle cx="16" cy="16" r="2.1" fill="currentColor" /></svg></span>lattice.</Link>
+        <Link to="/" className="absolute left-12 top-10 flex items-center gap-2 text-lg font-bold tracking-tight"><BrandMark />lattice.</Link>
         <div className="auth-story-content relative z-10">
         <p className="landing-eyebrow text-white/60">YOUR KNOWLEDGE, CONNECTED</p>
         <h1 className="mt-6 text-5xl font-semibold leading-[1.05] tracking-[-0.07em]">Answers that<br />show their <span className="headline-serif">work.</span></h1>

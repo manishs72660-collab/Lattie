@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/authSlice";
 import { newChat, openChat, deleteChat, fetchChats } from "../store/chatSlice";
+import BrandMark from "./BrandMark";
 
 const link = ({ isActive }) =>
   `app-nav-link block rounded-xl px-3 py-2.5 text-sm font-medium ${isActive ? "app-nav-active" : "text-ink hover:bg-line/60"}`;
@@ -31,7 +32,7 @@ export default function Layout() {
       <aside className={`fixed inset-y-0 left-0 z-20 flex w-72 flex-col border-r border-line bg-panel p-4 transition-transform md:static md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="mb-7 mt-10 md:mt-0">
           <button onClick={() => navigate("/")} className="mb-3 flex items-center gap-2.5 text-left">
-            <span className="brand-mark"><svg viewBox="0 0 32 32" fill="none" className="h-7 w-7"><path d="M16 4.5 26 10v12L16 27.5 6 22V10l10-5.5Z" stroke="currentColor" strokeWidth="1.5" /><path d="m6.5 10.3 9.5 5.3 9.5-5.3M16 16v11" stroke="currentColor" strokeWidth="1.5" /><circle cx="16" cy="16" r="2.1" fill="currentColor" /></svg></span>
+            <BrandMark />
             <span className="text-xl font-bold tracking-[-0.06em]">lattice<span className="text-[#659785]">.</span></span>
           </button>
           <p className="text-sm text-muted">Your knowledge, connected</p>

@@ -20,7 +20,9 @@ app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use("/api", limit("global", 300, 60, (r) => r.ip));
 
-app.get("/api/health", (_req, res) => res.json({ ok: true }));
+const health = (_req, res) => res.status(200).json({ ok: true, service: "lattice-api" });
+app.get("/health", health);
+app.get("/api/health", health);
 app.use("/api/auth", authRoutes);
 app.use("/api/documents", docRoutes);
 app.use("/api/chats", chatRoutes);

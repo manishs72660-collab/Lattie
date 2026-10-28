@@ -54,7 +54,7 @@ export default function GraphViewer({ data }) {
             ctx.fill();
             ctx.globalAlpha = 1;
             if (scale > 1.1 || node.degree > 2 || selected?.id === node.id) {
-              ctx.font = `${11 / Math.max(scale, 1)}px Schibsted Grotesk, sans-serif`;
+              ctx.font = `${11 / Math.max(scale, 1)}px Roboto, sans-serif`;
               ctx.fillStyle = "#17221e";
               ctx.textAlign = "center";
               ctx.fillText(node.name, node.x, node.y + r + 8 / Math.max(scale, 1));
