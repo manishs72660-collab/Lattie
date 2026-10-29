@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import BrandMark from "../components/BrandMark";
@@ -38,6 +39,169 @@ const FEATURES = [
   },
 ];
 
+const DEMOS = [
+  {
+    source: "doc",
+    q: "What changed after the acquisition?",
+    how: "Searched your documents",
+    answer: <>Acme’s growth came from its <mark>2023 acquisition of Northstar</mark>, which opened three new markets.</>,
+    cite: "Annual report, p. 12",
+  },
+  {
+    source: "graph",
+    q: "How are Acme and Northstar connected?",
+    how: "Followed your knowledge graph",
+    answer: <>Northstar became part of Acme in 2023, and <mark>two leaders now run both teams</mark>.</>,
+    cite: "2 connected facts",
+  },
+  {
+    source: "web",
+    q: "What is Acme saying publicly this week?",
+    how: "Checked the live web",
+    answer: <>Acme announced <mark>a third regional office</mark> and a new partnership, based on recent coverage.</>,
+    cite: "Live web result",
+  },
+];
+
+/* All coordinates live in a 960 x 480 space and are mirrored in CSS as percentages */
+const SOURCES = [
+  { id: "doc", cls: "hz-doc", title: "Annual report.pdf", sub: "28 pages indexed", icon: "PDF", path: "M130 96 C260 96 270 240 400 240" },
+  { id: "graph", cls: "hz-graph", title: "Knowledge graph", sub: "12 entities linked", icon: "graph", path: "M130 240 L400 240" },
+  { id: "web", cls: "hz-web", title: "Live web search", sub: "Current context", icon: "◎", path: "M130 384 C260 384 270 240 400 240" },
+];
+const OUT_PATH = "M400 240 L590 240";
+
+const ENTITIES = [
+  { name: "Acme", x: 335, y: 52 },
+  { name: "New markets", x: 520, y: 60 },
+  { name: "Northstar", x: 330, y: 430 },
+  { name: "2023 deal", x: 500, y: 430 },
+];
+
+const STARS = [
+  [40, 40, 2.5, 0], [64, 200, 2, 1.2], [30, 330, 2.5, .6], [74, 452, 2, 2.1],
+  [250, 28, 2, 1.6], [262, 150, 2.5, .3], [252, 340, 2, 2.4], [250, 452, 2.5, .9],
+  [640, 28, 2.5, 1.9], [706, 84, 2, .4], [900, 40, 2.5, 1.3], [932, 150, 2, 2.2],
+  [940, 330, 2.5, .8], [884, 440, 2, 1.7], [742, 462, 2.5, .2], [624, 444, 2, 2.6],
+];
+const STAR_LINES = [[0, 1], [1, 2], [2, 3], [4, 5], [5, 6], [6, 7], [8, 9], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15]];
+
+function SourceIcon({ icon }) {
+  if (icon !== "graph") return <>{icon}</>;
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="24" height="24" stroke="currentColor" strokeWidth="1.6">
+      <circle cx="6" cy="12" r="2.2" /><circle cx="18" cy="6" r="2.2" /><circle cx="18" cy="18" r="2.2" />
+      <path d="m8 11 7.8-4M8 13l7.8 4" />
+    </svg>
+  );
+}
+
+function HeroDemo() {
+  const [index, setIndex] = useState(0);
+  const [auto, setAuto] = useState(true);
+  const demo = DEMOS[index];
+  const active = SOURCES.find((s) => s.id === demo.source);
+  const graphOn = demo.source === "graph";
+
+  useEffect(() => {
+    if (!auto) return undefined;
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % DEMOS.length), 6500);
+    return () => clearInterval(timer);
+  }, [auto]);
+
+  const choose = (i) => { setAuto(false); setIndex(i); };
+
+  return (
+    <div className="hz-demo">
+      <div className="hz-questions" role="tablist" aria-label="Sample questions">
+        {DEMOS.map((item, i) => (
+          <button
+            key={item.q}
+            type="button"
+            role="tab"
+            aria-selected={i === index}
+            className={`hz-q ${i === index ? "hz-q-on" : ""}`}
+            onClick={() => choose(i)}
+          >
+            {item.q}
+          </button>
+        ))}
+      </div>
+
+      <div className="hz-visual" aria-label="Lattice connects your sources to one cited answer">
+        <div className="hz-stage">
+          <div className="hz-glow" />
+          <div className="hz-grid" />
+
+          <svg className="hz-svg" viewBox="0 0 960 480" preserveAspectRatio="none" fill="none" aria-hidden="true">
+            {STAR_LINES.map(([a, b]) => (
+              <line key={`${a}-${b}`} className="hz-star-line" x1={STARS[a][0]} y1={STARS[a][1]} x2={STARS[b][0]} y2={STARS[b][1]} />
+            ))}
+            {STARS.map(([x, y, r, d]) => (
+              <circle key={`${x}-${y}`} className="hz-star" cx={x} cy={y} r={r} style={{ animationDelay: `${d}s` }} />
+            ))}
+            {ENTITIES.map((e) => (
+              <line key={e.name} className={`hz-ent-line ${graphOn ? "hz-ent-line-on" : ""}`} x1="400" y1="240" x2={e.x} y2={e.y} />
+            ))}
+
+            {SOURCES.map((s) => (
+              <path key={s.id} className={`hz-edge hz-edge-${s.id} ${s.id === demo.source ? "hz-edge-on" : ""}`} d={s.path} />
+            ))}
+            <path className="hz-edge hz-edge-out" d={OUT_PATH} />
+
+            <g key={`flow-${index}`}>
+              <path className={`hz-flow hz-flow-${demo.source}`} d={active.path} />
+              <circle className={`hz-halo hz-p-${demo.source}`} r="11"><animateMotion dur="2.2s" repeatCount="indefinite" path={active.path} /></circle>
+              <circle className={`hz-dotp hz-p-${demo.source}`} r="4.5"><animateMotion dur="2.2s" repeatCount="indefinite" path={active.path} /></circle>
+              <path className="hz-flow hz-flow-out" d={OUT_PATH} />
+              <circle className="hz-halo hz-p-out" r="11"><animateMotion dur="1.6s" begin="1.1s" repeatCount="indefinite" path={OUT_PATH} /></circle>
+              <circle className="hz-dotp hz-p-out" r="4.5"><animateMotion dur="1.6s" begin="1.1s" repeatCount="indefinite" path={OUT_PATH} /></circle>
+            </g>
+          </svg>
+
+          {ENTITIES.map((e, i) => (
+            <span
+              key={e.name}
+              className={`hz-ent ${graphOn ? "hz-ent-on" : ""}`}
+              style={{ left: `${(e.x / 960) * 100}%`, top: `${(e.y / 480) * 100}%`, animationDelay: `${-i * 1.3}s` }}
+            >
+              {e.name}
+            </span>
+          ))}
+
+          {SOURCES.map((s) => (
+            <div key={s.id} className={`hz-node ${s.cls} ${s.id === demo.source ? "hz-node-on" : ""}`}>
+              <span className="hz-node-dot"><SourceIcon icon={s.icon} /></span>
+              <span className="hz-node-label">
+                <strong>{s.title}</strong>
+                <small>{s.sub}</small>
+              </span>
+            </div>
+          ))}
+
+          <div className="hz-hub">
+            <span className="hz-hub-ring hz-hub-ring-a" />
+            <span className="hz-hub-ring hz-hub-ring-b" />
+            <BrandMark />
+            <span className="hz-hub-name">AI agent</span>
+          </div>
+        </div>
+
+        <div className="hz-answer" key={index}>
+          <div className="hz-answer-head">
+            <span className="hz-answer-who">Lattice</span>
+            <span className="hz-grounded">✓ Grounded</span>
+          </div>
+          <span className="hz-answer-how">{demo.how}</span>
+          <p>{demo.answer}<sup>[1]</sup></p>
+          <span className="hz-cite">[1] {demo.cite}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Landing() {
   const token = useSelector((state) => state.auth.token);
   const appPath = token ? "/app" : "/register";
@@ -63,79 +227,27 @@ export default function Landing() {
         </nav>
       </header>
 
-      <section className="landing-hero mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[0.94fr_1.06fr] lg:gap-8 lg:pb-28 lg:pt-20">
-        <div className="hero-copy relative z-10">
-          <div className="landing-eyebrow"><span className="eyebrow-pulse" /> YOUR SECOND BRAIN, FINALLY ORGANIZED</div>
-          <h1 className="landing-headline mt-6 max-w-2xl text-[clamp(3.35rem,7.6vw,6.6rem)] font-semibold leading-[0.94] tracking-[-0.085em]">
-            Make sense of
-            <br />
-            <span className="headline-serif">everything</span>
-            <br />
-            you know<span className="headline-period">.</span>
+      {/* ============ HERO v3 ============ */}
+      <section className="hz-hero mx-auto max-w-7xl px-5 pb-20 pt-12 sm:px-8 sm:pt-20 lg:pb-28">
+        <div className="hz-copy">
+          <h1 className="hz-headline">
+            <span>Ask your files anything.</span>
+            <span className="hz-headline-soft">Get answers you can check<span className="headline-period">.</span></span>
           </h1>
-          <p className="mt-7 max-w-lg text-base leading-7 text-[#65716a] sm:text-lg sm:leading-8">
-            Your documents have the answers. Lattice connects the dots, finds the right source and shows its work—so you can get to the good part.
+          <p className="hz-lead">
+            Upload your PDFs and text files. Lattice finds the right source, connects the ideas inside them, and cites every answer.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="hz-actions">
             <Link to={appPath} className="landing-primary-cta">
               {token ? "Go to your workspace" : "Start exploring for free"} <ArrowIcon />
             </Link>
-            <a href="#how-it-works" className="landing-text-link">See how it works <span>↓</span></a>
-          </div>
-          <div className="mt-9 flex items-center gap-3 text-xs font-medium text-[#78837c]">
-            <div className="avatar-stack" aria-hidden="true"><span>L</span><span>✳</span><span>↗</span></div>
-            <span>Your files stay yours. Your ideas, connected.</span>
+            <a href="#how-it-works" className="hz-secondary">See how it works</a>
           </div>
         </div>
 
-        <div className="hero-visual relative mx-auto w-full max-w-[650px]" aria-label="Illustration of Lattice connecting sources to a cited answer">
-          <div className="visual-orbit orbit-one" />
-          <div className="visual-orbit orbit-two" />
-          <div className="visual-glow" />
-          <div className="visual-caption"><span className="caption-dot" /> ONE QUESTION. THE WHOLE PICTURE.</div>
-          <div className="source-card source-card-doc">
-            <span className="source-icon doc-icon">PDF</span>
-            <span><strong>Annual report.pdf</strong><small>28 pages · just indexed</small></span>
-            <span className="source-check">✓</span>
-          </div>
-          <div className="source-card source-card-graph">
-            <span className="source-icon graph-icon">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="6" cy="12" r="2.2" /><circle cx="18" cy="6" r="2.2" /><circle cx="18" cy="18" r="2.2" /><path d="m8 11 7.8-4M8 13l7.8 4" /></svg>
-            </span>
-            <span><strong>Knowledge graph</strong><small>12 entities connected</small></span>
-            <span className="source-check">↗</span>
-          </div>
-          <div className="source-card source-card-web">
-            <span className="source-icon web-icon">◎</span>
-            <span><strong>Live web search</strong><small>Current context found</small></span>
-            <span className="web-live">LIVE</span>
-          </div>
-
-          <svg className="connection-lines" viewBox="0 0 650 500" fill="none" aria-hidden="true">
-            <path className="flow-line line-doc" d="M132 113 C206 113 199 188 280 201" />
-            <path className="flow-line line-graph" d="M121 249 C195 249 213 249 280 249" />
-            <path className="flow-line line-web" d="M132 384 C206 384 199 310 280 297" />
-            <path className="answer-flow" d="M365 249 C418 249 406 249 463 249" />
-            <circle className="flow-particle particle-a" r="4"><animateMotion dur="3.1s" repeatCount="indefinite" path="M132 113 C206 113 199 188 280 201" /></circle>
-            <circle className="flow-particle particle-b" r="4"><animateMotion dur="2.6s" repeatCount="indefinite" path="M121 249 C195 249 213 249 280 249" /></circle>
-            <circle className="flow-particle particle-c" r="4"><animateMotion dur="3.4s" repeatCount="indefinite" path="M132 384 C206 384 199 310 280 297" /></circle>
-          </svg>
-
-          <div className="agent-core">
-            <div className="core-ring ring-back" />
-            <div className="core-ring ring-front" />
-            <BrandMark />
-            <span>AI AGENT</span>
-          </div>
-          <div className="answer-card">
-            <div className="answer-topline"><span className="answer-spark">✳</span><span>YOUR ANSWER</span><span className="answer-verified">✓ GROUNDED</span></div>
-            <p>Acme’s growth came from its <em>2023 acquisition</em> of Northstar, expanding into three new markets.<sup>[1][2]</sup></p>
-            <div className="answer-source-row"><span>[1] Annual report, p. 12</span><span>[2] 2 connected facts</span></div>
-          </div>
-          <div className="floating-note note-top"><span>✦</span> Found the connection</div>
-          <div className="floating-note note-bottom"><span>↗</span> Three sources checked</div>
-        </div>
+        <HeroDemo />
       </section>
+      {/* ============ /HERO v3 ============ */}
 
       <section className="signal-strip border-y border-[#e5e9e3] px-5 py-5 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-3 text-center sm:justify-between">
